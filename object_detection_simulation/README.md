@@ -74,6 +74,3 @@ ros2 run object_detection_simulation teleop
 ```
 
 Then you can read the prompt on the terminal to move the robot around.
-
-### Room for improvement
-- 
