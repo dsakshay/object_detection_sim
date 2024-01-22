@@ -11,6 +11,8 @@ import numpy as np
 from geometry_msgs.msg import Twist, PoseStamped
 from tf2_geometry_msgs import PointStamped
 
+from std_msgs.msg import String
+
 import tf2_ros
 # from std_msgs.msg import Float64MultiArray
 
@@ -24,6 +26,8 @@ class DetectionNode(Node):
         self.pub_twist = self.create_publisher(Twist, "/cmd_vel", 10)
 
         self.pub_loc = self.create_publisher(PoseStamped, "/detected_obj_loc", 10)
+
+        self.pub_state = self.create_publisher(String, "/state", 10)
 
         self.bridge = CvBridge()
 
@@ -48,6 +52,12 @@ class DetectionNode(Node):
         elif self.state == "move_towards":
             # Continue moving towards the object
             self.pub_twist.publish(self.move_towards_behavior(loc_msg))
+        elif self.state == "reached":
+            self.pub_twist.publish(self.stopRobotMotion())
+
+        state = String()
+        state.data = self.state
+        self.pub_state.publish(state)
 
     def search_behavior(self):
         # Implement a simple search behavior (e.g., spin in place)
@@ -62,6 +72,12 @@ class DetectionNode(Node):
         target_y = localization_msg.pose.position.y
         twist_msg.linear.x = 0.1  # Linear velocity
         twist_msg.angular.z = 0.01 * (target_y - localization_msg.pose.position.y)  # Adjust the proportional control
+        return twist_msg
+    
+    def stopRobotMotion(self):
+        twist_msg = Twist()
+        twist_msg.linear.x = 0.0
+        twist_msg.angular.z = 0.0
         return twist_msg
 
     def detectObject(self, frame):
@@ -85,12 +101,12 @@ class DetectionNode(Node):
                 largest_contour = max(contours, key=cv2.contourArea)
                 moments = cv2.moments(largest_contour)
 
-                if moments["m00"] != 0:
+                if moments["m00"] != 0 and self.state != "reached":
                     cx = float(moments["m10"] / moments["m00"])
                     cy = float(moments["m01"] / moments["m00"])
 
                     # Move towards the center of the red object (adjust the values as needed)
-                    twist_msg.linear.x = 0.1
+                    twist_msg.linear.x = 0.5
                     # twist_msg.angular.z = 0.01 * (cx - frame.shape[1] / 2)
 
                     # Localization data (publishing center coordinates)
@@ -117,7 +133,6 @@ class DetectionNode(Node):
                     self.state = "detect"
                 else:
                     self.state = "search"
-                    raise Exception("m00 is = 0!")
             else:
                 self.state = "search"
                 self.get_logger().warn("not finding contours, searching..")
@@ -146,7 +161,7 @@ class DetectionNode(Node):
             t = self.tf_buffer.lookup_transform_full(
                 target_frame="map",
                 target_time=rclpy.time.Time(),
-                source_frame="robot/camera_front",
+                source_frame="camera_front",
                 source_time=when,
                 fixed_frame='map',
                 timeout=rclpy.duration.Duration(seconds=0.05))
