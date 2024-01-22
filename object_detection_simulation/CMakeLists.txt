@@ -21,9 +21,14 @@ else()
 endif()
 
 find_package(ament_cmake REQUIRED)
-find_package(tf2_ros REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 set(ament_dependencies
   rclpy
@@ -33,40 +38,45 @@ set(ament_dependencies
 
   geometry_msgs
   nav_msgs
+  sensor_msgs
+  std_msgs
+
+  cv_bridge 
 
 )
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
 
 add_executable(teleop src/teleop.cpp)
 ament_target_dependencies(teleop rclcpp geometry_msgs)
 
 install(TARGETS teleop
-  DESTINATION lib/${PROJECT_NAME}
+DESTINATION lib/${PROJECT_NAME}
 )
 
-# install(PROGRAMS
-#   scripts/transform_publisher.py
-#   DESTINATION lib/${PROJECT_NAME}
-# )
+ament_python_install_package(${PROJECT_NAME})
+
+install(PROGRAMS
+scripts/detection_node.py
+DESTINATION lib/${PROJECT_NAME}
+)
 
 install(
   DIRECTORY
-    launch
-    models
-    worlds
-    ign
-    rviz
-    scripts
+  launch
+  models
+  worlds
+  ign
+  rviz
+  scripts
   DESTINATION
-    share/${PROJECT_NAME}/
-)
+  share/${PROJECT_NAME}/
+  )
 
-# Ref: https://github.com/ros-simulation/gazebo_ros_pkgs/wiki/ROS-2-Migration:-Gazebo-ROS-Paths 
+  if(BUILD_TESTING)
+    find_package(ament_lint_auto REQUIRED)
+    ament_lint_auto_find_test_dependencies()
+  endif()
+  
+  # Ref: https://github.com/ros-simulation/gazebo_ros_pkgs/wiki/ROS-2-Migration:-Gazebo-ROS-Paths 
 ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/${PROJECT_NAME}.sh.in")
 ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/${PROJECT_NAME}.dsv.in")
 

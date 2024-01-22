@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -59,6 +61,7 @@ def generate_launch_description():
             "/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V",
             "/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",
             "/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry",
+            "/laserscan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan",
             "/model/robot/pose@geometry_msgs/msg/TransformStamped[ignition.msgs.Pose",
             "/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
             "/camera/color@sensor_msgs/msg/Image[ignition.msgs.Image",
@@ -106,6 +109,30 @@ def generate_launch_description():
         "rviz", default_value="true", description="Open RViz."
     )
 
+    T_baselink_camera = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        arguments=[
+            "--x",
+            "2.012",
+            "--y",
+            "0",
+            "--z",
+            "-0.05",
+            "--yaw",
+            "0",
+            "--pitch",
+            "0",
+            "--roll",
+            "0",
+            "--frame-id",
+            "robot/base_link",
+            "--child-frame-id",
+            "robot/camera_front",
+        ],
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
+
     
 
     ld = LaunchDescription()
@@ -116,6 +143,7 @@ def generate_launch_description():
     ld.add_action(gazebo)
 
     ld.add_action(spawn_robot)
+    ld.add_action(T_baselink_camera)
 
     ld.add_action(bridge)
 

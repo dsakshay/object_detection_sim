@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
+import launch
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
@@ -41,7 +44,7 @@ def generate_launch_description():
             "-x",
             "5.0",
             "-y",
-            "20.0",
+            "15.0",
             "-z",
             "0.6",
             "-Y",
@@ -50,6 +53,30 @@ def generate_launch_description():
             os.path.join(pkg_robot_sim, "models", "object", "object.sdf"),
         ],
         output="screen",
+    )
+
+
+    map_2_odom_tf = Node(package="tf2_ros",
+        executable="static_transform_publisher",
+        name="map_2_odom",
+        parameters=[{"use_sim_time": use_sim_time}],
+        arguments=["--x",
+                    "0.0",
+                    "--y",
+                    "0.0",
+                    "--z",
+                    "0.0",
+                    "--roll",
+                    "0.0",
+                    "--yaw",
+                    "0.0",
+                    "--pitch",
+                    "0.0",
+                    "--frame-id",
+                    "map",
+                    "--child-frame-id",
+                    "/robot/odom"]
+                #    "10"]
     )
 
     rviz_node = Node(
@@ -67,6 +94,7 @@ def generate_launch_description():
     ld.add_action(robot_launch)
     ld.add_action(spawn_object)
     ld.add_action(rviz_node)
+    ld.add_action(map_2_odom_tf)
 
     return ld
 

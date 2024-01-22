@@ -308,8 +308,116 @@
 
         
 
-        <!-- LiDAR link  -->
+        <!-- 3D LiDAR link  -->
+        <link name="lidar_link">
 
+            <pose relative_to="base_link">0.55 0 0.3 0 0 0</pose>
+
+            <inertial>
+                <mass>1.2</mass>
+                <inertia>
+                    <ixx>0.001087473</ixx>
+                    <iyy>0.001087473</iyy>
+                    <izz>0.001092437</izz>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyz>0</iyz>
+                </inertia>
+            </inertial>
+
+            <visual name='visual'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.08</radius>
+                        <length>0.05</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient>
+                    <diffuse>0.2 0.2 0.2 1</diffuse>
+                    <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>.08</radius>
+                        <length>.05</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+
+            <sensor type="ray" name="sensor">
+
+            <!-- Position the ray sensor based on the specification. Also rotate
+                it by 90 degrees around the X-axis so that the <horizontal> rays
+                become vertical -->
+                <pose>0 0 -0.004645 1.5707 0 0</pose>
+
+                <!-- Enable visualization to see the rays in the GUI -->
+                <visualize>true</visualize>
+
+                <topic>lasescan</topic>
+                <!-- Set the update rate of the sensor -->
+                <update_rate>30</update_rate>
+                <ray>
+                    <!-- The scan element contains the horizontal and vertical beams.
+                        We are leaving out the vertical beams for this tutorial. -->
+                    <scan>
+                        <!-- The horizontal beams -->
+                        <horizontal>
+                            <!-- The velodyne has 32 beams(samples) -->
+                            <samples>32</samples>
+
+                            <!-- Resolution is multiplied by samples to determine number of
+                                simulated beams vs interpolated beams. See:
+                                http://sdformat.org/spec?ver=1.6&elem=sensor#horizontal_resolution
+                                -->
+                            <resolution>1</resolution>
+
+                            <!-- Minimum angle in radians -->
+                            <min_angle>-0.53529248</min_angle>
+
+                            <!-- Maximum angle in radians -->
+                            <max_angle>0.18622663</max_angle>
+                        </horizontal>
+                    </scan>
+
+                    <!-- Range defines characteristics of an individual beam -->
+                    <range>
+                        <!-- Minimum distance of the beam -->
+                        <min>0.05</min>
+
+                        <!-- Maximum distance of the beam -->
+                        <max>70</max>
+
+                        <!-- Linear resolution of the beam -->
+                        <resolution>0.02</resolution>
+                    </range>
+                </ray>
+            </sensor>
+        </link>
+
+        <joint name="lidar_joint" type="revolute">
+            <pose>0 0 -0.036785 0 0 0</pose>
+
+            <child>lidar_link</child>
+            <parent>base_link</parent>
+
+            <axis>
+
+                <!-- Revolve around the z-axis -->
+                <xyz>0 0 1</xyz>
+
+                <!-- Limit refers to the range of motion of the joint -->
+                <limit>
+                    <!-- Use a very large number to indicate a continuous revolution -->
+                    <lower>-10000000000000000</lower>
+                    <upper>10000000000000000</upper>
+                </limit>
+            </axis>
+        </joint>
 
         <!-- lidar plugin -->
 
@@ -317,10 +425,20 @@
         <plugin filename="libignition-gazebo-diff-drive-system.so" name="ignition::gazebo::systems::DiffDrive">
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel_joint</right_joint>
-            <wheel_separation>0.68</wheel_separation>
-            <wheel_radius>0.1</wheel_radius>
+            <wheel_separation>1.2</wheel_separation>
+            <wheel_radius>0.2</wheel_radius>
             <topic>/cmd_vel</topic>
             <tf_topic>/tf</tf_topic>
+        </plugin>
+
+        <plugin filename="libignition-gazebo-pose-publisher-system.so" name="ignition::gazebo::systems::PosePublisher">
+            <publish_link_pose>true</publish_link_pose>
+            <publish_collision_pose>false</publish_collision_pose>
+            <publish_visual_pose>false</publish_visual_pose>
+            <publish_sensor_pose>true</publish_sensor_pose>
+            <publish_nested_model_pose>false</publish_nested_model_pose>
+            <use_pose_vector_msg>true</use_pose_vector_msg>
+            <update_frequency>20</update_frequency>
         </plugin>
 
     </model>
