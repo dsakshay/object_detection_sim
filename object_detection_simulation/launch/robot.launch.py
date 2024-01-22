@@ -45,7 +45,7 @@ def generate_launch_description():
             "-Y",
             "1.57",
             "-file",
-            os.path.join(pkg_robot_ignition, "models", "robot", "model.sdf"),
+            os.path.join(pkg_robot_ignition, "models", "robot", "robot.sdf"),
         ],
         output="screen",
     )
@@ -58,6 +58,34 @@ def generate_launch_description():
             "/world/station/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
             "/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V",
             "/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",
+            "/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry",
+            "/model/robot/pose@geometry_msgs/msg/TransformStamped[ignition.msgs.Pose",
+            "/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
+            "/camera/color@sensor_msgs/msg/Image[ignition.msgs.Image",
+            "/world/station/model/robot/link/camera_depth_frame/sensor/depth/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
+            "/world/station/model/robot/link/camera_depth_frame/sensor/depth/depth_image/points@sensor_msgs/msg/PointCloud2[ignition.msgs.PointCloudPacked",
+        ],
+        remappings=[
+            (
+                "/camera/camera_info",
+                "/front_camera/rgb/camera_info",
+            ),
+            (
+                "/camera/color",
+                "/front_camera/rgb",
+            ),
+            (
+                "/world/station/model/robot/link/camera_depth_frame/sensor/depth/camera_info",
+                "/front_camera/stereo/camera_info",
+            ),
+            (
+                "/world/station/model/robot/link/camera_depth_frame/sensor/depth/depth_image/points",
+                "/front_camera/stereo/points",
+            ),
+            (
+                "/world/station/clock",
+                "/clock",
+            ),
         ],
         parameters=[{"use_sim_time": use_sim_time}],
         output="screen",

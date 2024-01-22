@@ -41,6 +41,14 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+
+add_executable(teleop src/teleop.cpp)
+ament_target_dependencies(teleop rclcpp geometry_msgs)
+
+install(TARGETS teleop
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 # install(PROGRAMS
 #   scripts/transform_publisher.py
 #   DESTINATION lib/${PROJECT_NAME}

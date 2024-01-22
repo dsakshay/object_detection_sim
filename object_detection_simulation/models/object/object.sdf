@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <sdf version="1.7">
 
-    <model name="box_model_transform">
+    <model name="object">
       <static>true</static>
       <pose>0 0 3.5 0 0.78539816339 0</pose>
       <link name="box_link">
@@ -39,7 +39,7 @@
       </link>
     </model>
 
-    <model name="box_link_transform">
+    <!-- <model name="box_link_transform">
       <pose>0 0 2 0 0 0</pose>
       <static>true</static>
       <link name="box_link">
@@ -76,6 +76,6 @@
           </material>
         </visual>
       </link>
-    </model>
+    </model> -->
 
 </sdf>
