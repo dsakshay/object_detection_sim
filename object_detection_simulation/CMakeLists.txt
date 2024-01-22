@@ -1,0 +1,65 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(object_detection_simulation)
+
+# Fortress
+if("$ENV{IGNITION_VERSION}" STREQUAL "fortress")
+  find_package(ignition-gazebo6 REQUIRED)
+
+  message(STATUS "Using Ignition Fortress")
+# Default to Edifice
+else()
+  find_package(ignition-gazebo5 QUIET)
+
+  if(NOT ignition-gazebo5_FOUND)
+    # Skip if Ignition not present
+    message(WARNING "Ignition Gazebo 5 or 6 not found, proceeding without that simulator.")
+    return()
+  else()
+    message(STATUS "Using Ignition Edifice")
+  endif()
+endif()
+
+find_package(ament_cmake REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+set(ament_dependencies
+  rclpy
+
+  tf2
+  tf2_ros
+
+  geometry_msgs
+  nav_msgs
+
+)
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+# install(PROGRAMS
+#   scripts/transform_publisher.py
+#   DESTINATION lib/${PROJECT_NAME}
+# )
+
+install(
+  DIRECTORY
+    launch
+    models
+    worlds
+    ign
+    rviz
+    scripts
+  DESTINATION
+    share/${PROJECT_NAME}/
+)
+
+# Ref: https://github.com/ros-simulation/gazebo_ros_pkgs/wiki/ROS-2-Migration:-Gazebo-ROS-Paths 
+ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/${PROJECT_NAME}.sh.in")
+ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/${PROJECT_NAME}.dsv.in")
+
+ament_package()
