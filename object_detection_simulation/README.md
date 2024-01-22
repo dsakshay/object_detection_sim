@@ -74,3 +74,20 @@ ros2 run object_detection_simulation teleop
 ```
 
 Then you can read the prompt on the terminal to move the robot around.
+
+
+## Room for improvement
+- A contact sensor can be added to detect that the robot has reached the target (minimal)
+- Pose given for the robot is based on the camera frame, and since I could not get the transform from camera frame to map frame - the actual location of the object in the world file can be improved 
+- Did not use relative distance/transform between the robot base_link and the object link to make the robot move towards it.  Hence I placed the object strategically in front of the robot so that the robot starts moving in that direction once it detects the object and moves as long as it detects the object in the camera frame. 
+- Detection of the object and movement of the robot could have been separate nodes to make it easier to maintain the code, but since this was a quick assignment , I ended up using a single node. 
+- Another option would be to use the apriltags on the object and obtain the transform of the object relative to the base_link and then move accordingly. 
+- Higher level task would be to add a perception/localisation based control structure to control the robot actions depending on the lidar and camera used
+
+
+## Challenges
+- Designing the robot in xml and trying to visualise it in the gazebo environment was tricky as I was not getting real time updates on the changes I was making to the geometry of the robot 
+- Adding the 3D lidar sensor and getting to visualise the point cloud for the same is challenging as it involves designing the lidar from scratch, including the model in gazebo, the sensor plugin to publish the point clouds in ignition gazebo environment which can then be visualised in rviz using the ros_gz_bridge node 
+- Used a minimal object detection algorithm based on the requirement and time constraint. 
+- Not able to visualise the pose of the detected object even though it was being published in the “map” frame. 
+- Not able to detect the position of the detected object in terms of map frame and hence can’t implement the logic to stop the robot once it reaches the object
