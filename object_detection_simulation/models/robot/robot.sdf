@@ -427,6 +427,10 @@
             <right_joint>right_wheel_joint</right_joint>
             <wheel_separation>1.2</wheel_separation>
             <wheel_radius>0.2</wheel_radius>
+            <odom_topic>/odom</odom_topic>
+            <odom_publish_frequency>20</odom_publish_frequency>
+            <frame_id>robot/odom</frame_id>
+            <child_frame_id>robot/base_link</child_frame_id>
             <topic>/cmd_vel</topic>
             <tf_topic>/tf</tf_topic>
         </plugin>

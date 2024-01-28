@@ -75,7 +75,7 @@ def generate_launch_description():
                     "--frame-id",
                     "map",
                     "--child-frame-id",
-                    "/robot/odom"]
+                    "robot/odom"]
                 #    "10"]
     )
 

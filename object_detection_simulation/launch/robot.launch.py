@@ -63,6 +63,7 @@ def generate_launch_description():
             "/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry",
             "/laserscan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan",
             "/model/robot/pose@geometry_msgs/msg/TransformStamped[ignition.msgs.Pose",
+            '/world/station/dynamic_pose/info@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V',
             "/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
             "/camera/color@sensor_msgs/msg/Image[ignition.msgs.Image",
             "/world/station/model/robot/link/camera_depth_frame/sensor/depth/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
