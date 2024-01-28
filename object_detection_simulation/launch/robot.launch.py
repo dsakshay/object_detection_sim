@@ -134,6 +134,30 @@ def generate_launch_description():
         parameters=[{"use_sim_time": use_sim_time}],
     )
 
+    T_baselink_lidar = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        arguments=[
+            "--x",
+            "0.38",
+            "--y",
+            "0",
+            "--z",
+            "0.33",
+            "--yaw",
+            "0",
+            "--pitch",
+            "0",
+            "--roll",
+            "0",
+            "--frame-id",
+            "robot/base_link",
+            "--child-frame-id",
+            "robot/lidar_link/laser",
+        ],
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
+
     
 
     ld = LaunchDescription()
@@ -145,6 +169,7 @@ def generate_launch_description():
 
     ld.add_action(spawn_robot)
     ld.add_action(T_baselink_camera)
+    ld.add_action(T_baselink_lidar)
 
     ld.add_action(bridge)
 
