@@ -63,6 +63,7 @@ def generate_launch_description():
             "/odom@nav_msgs/msg/Odometry[ignition.msgs.Odometry",
             "/laserscan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan",
             "/model/robot/pose@geometry_msgs/msg/TransformStamped[ignition.msgs.Pose",
+            '/world/station/dynamic_pose/info@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V',
             "/camera/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
             "/camera/color@sensor_msgs/msg/Image[ignition.msgs.Image",
             "/world/station/model/robot/link/camera_depth_frame/sensor/depth/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo",
@@ -133,6 +134,30 @@ def generate_launch_description():
         parameters=[{"use_sim_time": use_sim_time}],
     )
 
+    T_baselink_lidar = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        arguments=[
+            "--x",
+            "0.38",
+            "--y",
+            "0",
+            "--z",
+            "0.33",
+            "--yaw",
+            "0",
+            "--pitch",
+            "0",
+            "--roll",
+            "0",
+            "--frame-id",
+            "robot/base_link",
+            "--child-frame-id",
+            "robot/lidar_link/laser",
+        ],
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
+
     
 
     ld = LaunchDescription()
@@ -144,6 +169,7 @@ def generate_launch_description():
 
     ld.add_action(spawn_robot)
     ld.add_action(T_baselink_camera)
+    ld.add_action(T_baselink_lidar)
 
     ld.add_action(bridge)
 

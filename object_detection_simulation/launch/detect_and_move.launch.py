@@ -33,9 +33,27 @@ def generate_launch_description():
         parameters=[{"use_sim_time": use_sim_time}],
     )
 
+    pose_pub_node = Node(
+        package="object_detection_simulation",
+        executable="pose_pub.py",
+        name="pose_pub_node",
+        output="screen",
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
+
+    move_node = Node(
+        package="object_detection_simulation",
+        executable="move_to_goal_node.py",
+        name="move_node",
+        output="screen",
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
+
     ld = LaunchDescription()
 
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(detect_node)
+    ld.add_action(move_node)
+    # ld.add_action(pose_pub_node)
 
     return ld

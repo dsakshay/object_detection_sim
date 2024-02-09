@@ -56,6 +56,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
 scripts/detection_node.py
+scripts/move_to_goal_node.py
 DESTINATION lib/${PROJECT_NAME}
 )
 
