@@ -24,7 +24,7 @@ Assuming that the local machine already has the required dependencies , here is 
 
 - Firstly setup the package in the src folder of a workspace (lets call it simulation_ws)
 ```
-cd ~/simulation_ws/src/object_detection_simulation
+cd ~/simulation_ws/src/object_detection_sim
 ```
 
 - Add the environment variables as given below to the ~/.bashrc file - 
@@ -41,13 +41,13 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 - Then build the package using the following commands - 
 ```
 cd ~/simulation_ws/
-colcon build --packages-select object_detection_simulation
+colcon build --packages-select object_detection_sim
 ```
 
 - Then to run the simulation in the simulator - 
 ```
 source install/setup.bash
-ros2 launch object_detection_simulation simulation.launch.py
+ros2 launch object_detection_sim simulation.launch.py
 ```
 This launches the robot with the red box 15 m away in a urban station world and also launches the rviz window with the preset visualisation window.
 
@@ -55,7 +55,7 @@ This launches the robot with the red box 15 m away in a urban station world and 
 ```
 cd ~/simulation_ws/
 source install/setup.bash
-ros2 launch object_detection_simulation detect_and_move.launch.py
+ros2 launch object_detection_sim detect_and_move.launch.py
 ```
 
 ### Side notes 
@@ -64,13 +64,13 @@ ros2 launch object_detection_simulation detect_and_move.launch.py
 ```
 cd ~/simulation_ws/
 source install/setup.bash
-ros2 launch object_detection_simulation robot.launch.py
+ros2 launch object_detection_sim robot.launch.py
 ```
 - Open another terminal and run these commands - 
 ```
 cd ~/simulation_ws/
 source install/setup.bash
-ros2 run object_detection_simulation teleop
+ros2 run object_detection_sim teleop
 ```
 
 Then you can read the prompt on the terminal to move the robot around.

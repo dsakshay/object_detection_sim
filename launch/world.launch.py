@@ -15,7 +15,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     pkg_ros_ign_gazebo = get_package_share_directory("ros_ign_gazebo")
-    pkg_robot_sim = get_package_share_directory("object_detection_simulation")
+    pkg_robot_sim = get_package_share_directory("object_detection_sim")
     
     # Gazebo launch
     gazebo = IncludeLaunchDescription(

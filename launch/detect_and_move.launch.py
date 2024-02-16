@@ -26,7 +26,7 @@ def generate_launch_description():
 
 
     detect_node = Node(
-        package="object_detection_simulation",
+        package="object_detection_sim",
         executable="detection_node.py",
         name="detect_node",
         output="screen",
@@ -34,7 +34,7 @@ def generate_launch_description():
     )
 
     pose_pub_node = Node(
-        package="object_detection_simulation",
+        package="object_detection_sim",
         executable="pose_pub.py",
         name="pose_pub_node",
         output="screen",
@@ -42,7 +42,7 @@ def generate_launch_description():
     )
 
     move_node = Node(
-        package="object_detection_simulation",
+        package="object_detection_sim",
         executable="move_to_goal_node.py",
         name="move_node",
         output="screen",
