@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(object_detection_simulation)
+project(object_detection_sim)
 
 # Fortress
 if("$ENV{IGNITION_VERSION}" STREQUAL "fortress")

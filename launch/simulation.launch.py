@@ -14,7 +14,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    pkg_robot_sim = get_package_share_directory("object_detection_simulation")
+    pkg_robot_sim = get_package_share_directory("object_detection_sim")
 
     default_rviz = os.path.join(pkg_robot_sim, "rviz", "obj_detect.rviz")
 
